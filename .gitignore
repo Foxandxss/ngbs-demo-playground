@@ -2,6 +2,7 @@
 /typings/
 /dist/
 /temp/
+/demo/node_modules/
 npm-debug.log
 .sw*
 .idea
