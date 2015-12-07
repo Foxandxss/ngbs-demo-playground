@@ -6,6 +6,7 @@ import {Component, bootstrap} from 'angular2/angular2';
     <div>Hello World</div>
   `
 })
-class Demo {}
+class Demo {
+}
 
 bootstrap(Demo);

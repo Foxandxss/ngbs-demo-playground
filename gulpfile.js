@@ -12,7 +12,7 @@ var runSequence = require('run-sequence');
 var webpack = require('webpack');
 var webpackDemoConfig = require('./webpack.demo.js');
 
-var PATHS = {src: 'src/**/*.ts', specs: 'src/**/*.spec.ts'};
+var PATHS = {src: 'src/**/*.ts', specs: 'src/**/*.spec.ts', demo: 'demo/**/*.ts'};
 
 // Transpiling & Building
 
@@ -102,14 +102,13 @@ gulp.task('enforce-format', function() {
 });
 
 function doCheckFormat() {
-  return gulp.src(['gulpfile.js', 'karma-test-shim.js', PATHS.src]).pipe(gulpFormat.checkFormat('file', clangFormat));
+  return gulp.src(['gulpfile.js', 'karma-test-shim.js', PATHS.src, PATHS.demo])
+      .pipe(gulpFormat.checkFormat('file', clangFormat));
 }
 
 // Demo
 
-gulp.task('demo-server', shell.task([
-  'webpack-dev-server --config webpack.demo.js --inline --progress'
-]));
+gulp.task('demo-server', shell.task(['webpack-dev-server --config webpack.demo.js --inline --progress']));
 
 gulp.task('build:demo', function(done) {
   var config = Object.create(webpackDemoConfig);
