@@ -9,14 +9,13 @@ module.exports = {
       'angular2/angular2'
     ],
     'app': [
-      './src/demo.ts'
+      './demo/src/demo.ts'
     ]
   },
   output: {
-    path: __dirname + '/public',
-    publicPath: 'http://localhost:8080/',
-    filename: '[name].bundle.js',
-    chunkFilename: '[name].bundle.js'
+    path: __dirname + '/demo/dist',
+    filename: '[name].[hash].bundle.js',
+    chunkFilename: '[name].[hash].bundle.js'
   },
   resolve: {
     extensions: ['', '.ts', '.js']
@@ -27,10 +26,6 @@ module.exports = {
       {
         test: /\.ts$/,
         loader: 'ts-loader'
-      },
-      {
-        test: /\.html$/,
-        loader: 'raw'
       }
     ]
   },
@@ -40,15 +35,15 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'angular2',
       minChunks: Infinity,
-      filename: 'angular2.bundle.js'
+      filename: 'angular2.[hash].bundle.js'
     }),
     new HtmlWebpackPlugin({
-      template: './src/index.html',
+      template: './demo/src/index.html',
       inject: 'body'
     })
   ],
   devServer: {
-    contentBase: './public',
+    contentBase: './demo/dist',
     stats: {
       modules: false,
       cached: false,

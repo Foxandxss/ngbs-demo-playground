@@ -3,11 +3,14 @@ var ts = require('gulp-typescript');
 var gutil = require('gulp-util');
 var sourcemaps = require('gulp-sourcemaps');
 var ddescribeIit = require('gulp-ddescribe-iit');
+var shell = require('gulp-shell');
 var del = require('del');
 var merge = require('merge2');
 var clangFormat = require('clang-format');
 var gulpFormat = require('gulp-clang-format');
 var runSequence = require('run-sequence');
+var webpack = require('webpack');
+var webpackDemoConfig = require('./webpack.demo.js');
 
 var PATHS = {src: 'src/**/*.ts', specs: 'src/**/*.spec.ts'};
 
@@ -24,7 +27,6 @@ gulp.task('cjs', function() {
 });
 
 gulp.task('umd', function(cb) {
-  var webpack = require('webpack');
   webpack(
       {
         entry: './dist/cjs/core.js',
@@ -102,6 +104,23 @@ gulp.task('enforce-format', function() {
 function doCheckFormat() {
   return gulp.src(['gulpfile.js', 'karma-test-shim.js', PATHS.src]).pipe(gulpFormat.checkFormat('file', clangFormat));
 }
+
+// Demo
+
+gulp.task('demo-server', shell.task([
+  'webpack-dev-server --config webpack.demo.js --inline --progress'
+]));
+
+gulp.task('build:demo', function(done) {
+  var config = Object.create(webpackDemoConfig);
+  config.plugins = config.plugins.concat(new webpack.optimize.UglifyJsPlugin());
+
+  webpack(config, function(err, stats) {
+    if (err) throw new gutil.PluginError('build:demo', err);
+    gutil.log('[build:demo]', stats.toString({colors: true}));
+    done();
+  });
+});
 
 // Public Tasks
 
