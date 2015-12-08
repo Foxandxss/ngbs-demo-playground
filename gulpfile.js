@@ -64,26 +64,26 @@ function startKarmaServer(isTddMode, done) {
 
 gulp.task('clean:tests', function() { return del('temp/'); });
 
-gulp.task('build-tests', function() {
+gulp.task('build:tests', function() {
   var tsResult = gulp.src(PATHS.src).pipe(sourcemaps.init()).pipe(ts(testProject));
 
   return tsResult.js.pipe(sourcemaps.write('.')).pipe(gulp.dest('temp'));
 });
 
-gulp.task('clean-build-tests', function(done) { runSequence('clean:tests', 'build-tests', done); });
+gulp.task('clean:build-tests', function(done) { runSequence('clean:tests', 'build:tests', done); });
 
 gulp.task(
     'ddescribe-iit', function() { return gulp.src(PATHS.specs).pipe(ddescribeIit({allowDisabledTests: false})); });
 
-gulp.task('test', ['clean-build-tests'], function(done) { startKarmaServer(false, done); });
+gulp.task('test', ['clean:build-tests'], function(done) { startKarmaServer(false, done); });
 
-gulp.task('tdd', ['clean-build-tests'], function(done) {
+gulp.task('tdd', ['clean:build-tests'], function(done) {
   startKarmaServer(true, function(err) {
     done(err);
     process.exit(1);
   });
 
-  gulp.watch(PATHS.src, ['build-tests']);
+  gulp.watch(PATHS.src, ['build:tests']);
 });
 
 
@@ -109,6 +109,8 @@ function doCheckFormat() {
 
 // Demo
 
+gulp.task('clean:demo-cache', function() { return del('.publish/'); });
+
 gulp.task('demo-server', shell.task(['webpack-dev-server --config webpack.demo.js --inline --progress']));
 
 gulp.task('build:demo', function(done) {
@@ -122,10 +124,7 @@ gulp.task('build:demo', function(done) {
   });
 });
 
-gulp.task('deploy:demo', function() {
-  return gulp.src(PATHS.demoDist)
-    .pipe(ghPages());
-});
+gulp.task('demo-push', function() { return gulp.src(PATHS.demoDist).pipe(ghPages()); });
 
 // Public Tasks
 
@@ -133,8 +132,6 @@ gulp.task('build', function(done) {
   runSequence('enforce-format', 'ddescribe-iit', 'test', 'clean:build', 'cjs', 'umd', done);
 });
 
-gulp.task('build-demo', function(done) {
-  runSequence('build:demo', 'deploy:demo', done);
-});
+gulp.task('deploy-demo', function(done) { runSequence('build:demo', 'demo-push', 'clean:demo-cache', done); });
 
 gulp.task('default', function(done) { runSequence('enforce-format', 'ddescribe-iit', 'test', done); });
