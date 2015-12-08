@@ -109,7 +109,7 @@ function doCheckFormat() {
 
 // Demo
 
-gulp.task('clean:demo', function() { return del('.publish/'); });
+gulp.task('clean:demo', function() { return del('demo/dist'); });
 
 gulp.task('clean:demo-cache', function() { return del('.publish/'); });
 
