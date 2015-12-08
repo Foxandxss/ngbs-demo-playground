@@ -109,6 +109,8 @@ function doCheckFormat() {
 
 // Demo
 
+gulp.task('clean:demo', function() { return del('.publish/'); });
+
 gulp.task('clean:demo-cache', function() { return del('.publish/'); });
 
 gulp.task('demo-server', shell.task(['webpack-dev-server --config webpack.demo.js --inline --progress']));
@@ -132,6 +134,7 @@ gulp.task('build', function(done) {
   runSequence('enforce-format', 'ddescribe-iit', 'test', 'clean:build', 'cjs', 'umd', done);
 });
 
-gulp.task('deploy-demo', function(done) { runSequence('build:demo', 'demo-push', 'clean:demo-cache', done); });
+gulp.task(
+    'deploy-demo', function(done) { runSequence('clean:demo', 'build:demo', 'demo-push', 'clean:demo-cache', done); });
 
 gulp.task('default', function(done) { runSequence('enforce-format', 'ddescribe-iit', 'test', done); });
