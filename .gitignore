@@ -3,6 +3,8 @@
 /dist/
 /temp/
 /demo/node_modules/
+/demo/dist/
 npm-debug.log
+.publish
 .sw*
 .idea

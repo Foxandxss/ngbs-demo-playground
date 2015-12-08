@@ -14,8 +14,8 @@ module.exports = {
   },
   output: {
     path: __dirname + '/demo/dist',
-    filename: '[name].[hash].bundle.js',
-    chunkFilename: '[name].[hash].bundle.js'
+    filename: '[name].bundle.js',
+    chunkFilename: '[name].bundle.js'
   },
   resolve: {
     extensions: ['', '.ts', '.js']
@@ -35,7 +35,7 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'angular2',
       minChunks: Infinity,
-      filename: 'angular2.[hash].bundle.js'
+      filename: 'angular2.bundle.js'
     }),
     new HtmlWebpackPlugin({
       template: './demo/src/index.html',

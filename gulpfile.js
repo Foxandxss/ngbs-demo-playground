@@ -4,6 +4,7 @@ var gutil = require('gulp-util');
 var sourcemaps = require('gulp-sourcemaps');
 var ddescribeIit = require('gulp-ddescribe-iit');
 var shell = require('gulp-shell');
+var ghPages = require('gulp-gh-pages');
 var del = require('del');
 var merge = require('merge2');
 var clangFormat = require('clang-format');
@@ -12,7 +13,7 @@ var runSequence = require('run-sequence');
 var webpack = require('webpack');
 var webpackDemoConfig = require('./webpack.demo.js');
 
-var PATHS = {src: 'src/**/*.ts', specs: 'src/**/*.spec.ts', demo: 'demo/**/*.ts'};
+var PATHS = {src: 'src/**/*.ts', specs: 'src/**/*.spec.ts', demo: 'demo/**/*.ts', demoDist: 'demo/dist/**/*'};
 
 // Transpiling & Building
 
@@ -121,10 +122,19 @@ gulp.task('build:demo', function(done) {
   });
 });
 
+gulp.task('deploy:demo', function() {
+  return gulp.src(PATHS.demoDist)
+    .pipe(ghPages());
+});
+
 // Public Tasks
 
 gulp.task('build', function(done) {
   runSequence('enforce-format', 'ddescribe-iit', 'test', 'clean:build', 'cjs', 'umd', done);
+});
+
+gulp.task('build-demo', function(done) {
+  runSequence('build:demo', 'deploy:demo', done);
 });
 
 gulp.task('default', function(done) { runSequence('enforce-format', 'ddescribe-iit', 'test', done); });
