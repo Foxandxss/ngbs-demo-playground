@@ -1,4 +1,5 @@
-import {Component, Input, Output, NgFor, EventEmitter, OnInit} from 'angular2/angular2';
+import {Component, Input, Output, EventEmitter, OnInit} from 'angular2/core';
+import {NgFor} from 'angular2/common';
 
 @Component({
   selector: 'ngb-rating',
@@ -31,7 +32,7 @@ export class NgbRating implements OnInit {
     this.hover.next(value);
   }
 
-  onInit(): void {
+  ngOnInit(): void {
     this._oldRate = this.rate;
     this.range = this._buildTemplateObjects();
   }
