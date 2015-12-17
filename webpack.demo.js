@@ -3,14 +3,8 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: {
-    'angular2': [
-      'zone.js',
-      'reflect-metadata',
-      'angular2/angular2'
-    ],
-    'app': [
-      './demo/src/demo.ts'
-    ]
+    'app': './demo/src/demo.ts',
+    'vendor': './demo/src/vendor.ts'
   },
   output: {
     path: __dirname + '/demo/dist',
@@ -27,18 +21,19 @@ module.exports = {
         test: /\.ts$/,
         loader: 'ts-loader'
       }
-    ]
+    ],
+    noParse: [ /angular2\/bundles\/.+/ ]
   },
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'angular2',
+      name: 'vendor',
       minChunks: Infinity,
-      filename: 'angular2.bundle.js'
+      filename: 'vendor.bundle.js'
     }),
     new HtmlWebpackPlugin({
-      template: './demo/src/index.html',
+      template: './demo/index.html',
       inject: 'body'
     })
   ],
