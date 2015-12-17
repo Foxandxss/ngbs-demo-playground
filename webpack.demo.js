@@ -3,8 +3,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: {
-    'app': './demo/src/demo.ts',
-    'vendor': './demo/src/vendor.ts'
+    'app': './demo/src/demo.ts'
   },
   output: {
     path: __dirname + '/demo/dist',
@@ -25,13 +24,6 @@ module.exports = {
     noParse: [ /angular2\/bundles\/.+/ ]
   },
   plugins: [
-    new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks: Infinity,
-      filename: 'vendor.bundle.js'
-    }),
     new HtmlWebpackPlugin({
       template: './demo/index.html',
       inject: 'body'
