@@ -3,15 +3,11 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: {
-    'app': [
-      'angular2/core',
-      './demo/src/demo.ts'
-    ]
+    'app': './demo/src/demo.ts'
   },
   output: {
     path: __dirname + '/demo/dist',
-    filename: '[name].bundle.js',
-    chunkFilename: '[name].bundle.js'
+    filename: 'bundle.js'
   },
   resolve: {
     extensions: ['', '.ts', '.js']
@@ -23,8 +19,7 @@ module.exports = {
         test: /\.ts$/,
         loader: 'ts-loader'
       }
-    ],
-    noParse: [ /angular2\/bundles\/.+/ ]
+    ]
   },
   plugins: [
     new HtmlWebpackPlugin({
