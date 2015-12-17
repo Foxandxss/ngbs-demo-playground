@@ -113,7 +113,13 @@ gulp.task('clean:demo', function() { return del('demo/dist'); });
 
 gulp.task('clean:demo-cache', function() { return del('.publish/'); });
 
-gulp.task('demo-server', shell.task(['webpack-dev-server --config webpack.demo.js --inline --progress']));
+gulp.task('copy:polyfills-demo', function() {
+  gulp.src('./node_modules/angular2/bundles/angular2-polyfills.js').pipe(gulp.dest('./demo/dist/lib/'));
+});
+
+gulp.task(
+    'demo-server', ['copy:polyfills-demo'],
+    shell.task(['webpack-dev-server --config webpack.demo.js --inline --progress']));
 
 gulp.task('build:demo', function(done) {
   var config = Object.create(webpackDemoConfig);
@@ -134,7 +140,8 @@ gulp.task('build', function(done) {
   runSequence('enforce-format', 'ddescribe-iit', 'test', 'clean:build', 'cjs', 'umd', done);
 });
 
-gulp.task(
-    'deploy-demo', function(done) { runSequence('clean:demo', 'build:demo', 'demo-push', 'clean:demo-cache', done); });
+gulp.task('deploy-demo', function(done) {
+  runSequence('clean:demo', 'copy:polyfills-demo', 'build:demo', 'demo-push', 'clean:demo-cache', done);
+});
 
 gulp.task('default', function(done) { runSequence('enforce-format', 'ddescribe-iit', 'test', done); });

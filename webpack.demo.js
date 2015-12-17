@@ -3,7 +3,10 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: {
-    'app': './demo/src/demo.ts'
+    'app': [
+      'angular2/core',
+      './demo/src/demo.ts'
+    ]
   },
   output: {
     path: __dirname + '/demo/dist',
